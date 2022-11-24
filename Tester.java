@@ -4,9 +4,9 @@ import java.io.PrintWriter;
 public class Tester {
     public static void main(String[] args) throws FileNotFoundException {
 
-        int popSize = 100;
-        double mutationRate = 0.01;
-        int timesRunnedProgram = 1000;
+        int popSize = Integer.parseInt(args[0]);
+        double mutationRate = Double.parseDouble(args[1]);
+        int timesRunnedProgram = Integer.parseInt(args[2]);
 
         Practical p = new Practical(popSize, mutationRate);
         PrintWriter writer = new PrintWriter(
