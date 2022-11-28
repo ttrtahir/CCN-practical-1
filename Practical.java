@@ -12,6 +12,9 @@ import java.util.Random;
  * 
  */
 
+ //TO DO
+ //mitoz ise clonlar mutasyon da kat
+
 public class Practical {
 
 	static final String TARGET = "HELLO WORLD";
@@ -20,19 +23,34 @@ public class Practical {
 	int popSize;
 	double mutationRate;
 	int generationCounter;
+	boolean crossoverable;
 
 	/**
 	 * @param args
 	 */
 
+	public static void main(String[] args) {
+
+		int popSize = Integer.parseInt(args[0]);
+        double mutationRate = Double.parseDouble(args[1]);
+
+		Practical p = new Practical(popSize, mutationRate);
+		p.calculate();
+	}
+
 	public Practical(int popSize, double mutationRate) {
 		this.popSize = popSize;
 		this.mutationRate = mutationRate;
+		this.crossoverable = true;
+	}
+	public Practical(int popSize, double mutationRate, boolean crossoverable) {
+		this.popSize = popSize;
+		this.mutationRate = mutationRate;
+		this.crossoverable = crossoverable;
 	}
 
 	public void calculate() {
 
-		this.popSize = 100;
 		for (char c = 'A'; c <= 'Z'; c++) {
 			alphabet[c - 'A'] = c;
 		}
@@ -50,11 +68,6 @@ public class Practical {
 			population[i] = new Individual(tempChromosome);
 		}
 
-		// What does your population look like?
-		// for (int i = 0; i < population.length; i++) {
-		// System.out.println(population[i].genoToPhenotype());
-		// }
-
 		this.generationCounter = 0;
 
 		do {
@@ -64,40 +77,28 @@ public class Practical {
 				break;
 			sortIndividualsByFitness(population);
 
-			for (int i = 0; i < popSize / 2; i++) {
-				// the fittest is crossing over with the second most fittest etc.
-				// but also the least fit ones crossing over too, to increase the chance of
-				// generating a required gene that are not yet acquired by the fittest ones by
-				// using mutation chance, without having risk the of decreasing its fitness
-				int index1 = i * 2;
-				int index2 = i * 2 + 1;
-				crossover(population[index1], population[index2], mutationRate);
+			if(crossoverable){
+
 			}
+			else
+				for (int i = 0; i < popSize / 2; i++) {
+					// the fittest is crossing over with the second most fittest etc.
+					// but also the least fit ones crossing over too, to increase the chance of
+					// generating a required gene that are not yet acquired by the fittest ones by
+					// using mutation chance, without having risk the of decreasing its fitness
+					int index1 = i * 2;
+					int index2 = i * 2 + 1;
+					crossover(population[index1], population[index2], mutationRate);
+				}
 		} while (true);
 
-		// do your own cool GA here
-		/**
-		 * Some general programming remarks and hints:
-		 * - A crucial point is to set each individual's fitness (by the setFitness()
-		 * method) before sorting. When is an individual fit?
-		 * How do you encode that into a double (between 0 and 1)?
-		 * - Decide when to stop, that is: when the algorithm has converged. And make
-		 * sure you terminate your loop when it does.
-		 * - print the whole population after convergence and print the number of
-		 * generations it took to converge.
-		 * - print lots of output (especially if things go wrong).
-		 * - work in an orderly and structured fashion (use tabs, use methods,..)
-		 * - DONT'T make everything private. This will only complicate things. Keep
-		 * variables local if possible
-		 * - A common error are mistakes against pass-by-reference (this means that you
-		 * pass the
-		 * address of an object, not a copy of the object to the method). There is a
-		 * deepclone method included in the
-		 * Individual class.Use it!
-		 * - You can compare your chromosome and your target string, using for eg.
-		 * TARGET.charAt(i) == ...
-		 * - Check your integers and doubles (eg. don't use ints for double divisions).
-		 */
+		printIndividuals(population);
+	}
+
+	public void printIndividuals(Individual[] population){
+		for (int i = 0; i < population.length; i++) {
+			System.out.println(population[i].genoToPhenotype());
+		}
 	}
 
 	public static void fitnessCalculator(Individual[] population) {
@@ -111,12 +112,15 @@ public class Practical {
 				if (individualChromosome[currentGene] == targetCharArray[currentGene])
 					currentFitness++;
 			}
-			individual.setFitness(currentFitness);
+			//between 0 and 1
+			double currentFitnessDouble = (double)currentFitness / 11;
+			individual.setFitness(currentFitnessDouble);
 		}
 	}
 
 	public static boolean targetChecker(Individual[] population) {
-		if (population[0].getFitness() == TARGET.length()) // HELLO WORLD length
+		double epsilon = 0.001;
+		if(Math.abs(population[0].getFitness() - 1) < epsilon)
 			return true;
 		return false;
 	}
@@ -163,6 +167,12 @@ public class Practical {
 				}
 			}
 		}
+
+	}
+
+	//clone
+	public static void mitosis(Individual individual, double mutationRate){
+		Random random = new Random();
 
 	}
 
