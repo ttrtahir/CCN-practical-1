@@ -10,7 +10,7 @@ import java.util.Random;
  * Prints the last generation and generation amount needed to get the target.
  * 
  * @author Yusuf Tahir Aydin
- * @author Batu
+ * @author Batu Ozogul
  */
 
 public class Practical {
