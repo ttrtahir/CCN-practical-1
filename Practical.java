@@ -159,9 +159,7 @@ public class Practical {
 	 */
 	public static boolean targetChecker(Individual[] population) {
 		double epsilon = 0.001;
-		if (Math.abs(population[0].getFitness() - 1) < epsilon)
-			return true;
-		return false;
+		return Math.abs(population[0].getFitness() - 1) < epsilon;
 	}
 
 	/**
